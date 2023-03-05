@@ -7,20 +7,17 @@ import ru.autotest.errors.WebDriverNotSupport;
 import java.util.Locale;
 
 public class WebDriverFactory implements IWebDriverFactory {
-
-    private String browserType = System.getProperty("browser", "chrome").trim().toLowerCase(Locale.ROOT);
-
     @Override
-    public EventFiringWebDriver getWebDriver() {
+    public EventFiringWebDriver getWebDriver(String browserType) {
 
-        switch (this.browserType) {
+        switch (browserType) {
             case "chrome":
                 return new EventFiringWebDriver(new Chrome().createDriver(new DesiredCapabilities()));
             case "firefox":
                 return new EventFiringWebDriver(new Firefox().createDriver(new DesiredCapabilities()));
             case "opera":
                 try {
-                    throw new WebDriverNotSupport(this.browserType);
+                    throw new WebDriverNotSupport(browserType);
                 } catch (WebDriverNotSupport e) {
                     e.printStackTrace();
                     return null;

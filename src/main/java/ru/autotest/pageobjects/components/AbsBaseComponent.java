@@ -1,11 +1,13 @@
 package ru.autotest.pageobjects.components;
 
+import com.google.inject.Inject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.autotest.annotations.Component;
 import ru.autotest.pageobjects.pages.PageObject;
+import ru.autotest.support.GuiceScoped;
 
 public abstract class AbsBaseComponent<T> extends PageObject<T> {
 
@@ -33,8 +35,9 @@ public abstract class AbsBaseComponent<T> extends PageObject<T> {
     }
 
 
-    public AbsBaseComponent(WebDriver driver) {
-        super(driver);
+    @Inject
+    public AbsBaseComponent(GuiceScoped guiceScoped) {
+        super(guiceScoped);
         actions = new Actions(driver);
     }
 

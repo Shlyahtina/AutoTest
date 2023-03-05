@@ -1,8 +1,13 @@
 package ru.autotest.pageobjects.pages;
 
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import ru.autotest.annotations.UrlPage;
+import ru.autotest.support.GuiceScoped;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +23,12 @@ public abstract class AbstractPage<T> extends PageObject<T> {
      * получить стр
      */
 
-    public AbstractPage(WebDriver driver) {
-        super(driver);
+    @FindBy(tagName = "h1")
+    public WebElement header;
+
+    @Inject
+    public AbstractPage(GuiceScoped guiceScoped) {
+        super(guiceScoped);
     }
 
     protected String getBaseUrl() {
@@ -61,5 +70,10 @@ public abstract class AbstractPage<T> extends PageObject<T> {
     }
 
     public void scrollPageTo() {
+    }
+
+    public T pageHeaderShouldBeSameAs(String expectedHeader) {
+        Assertions.assertEquals(expectedHeader, header.getText(), "");
+        return (T) this;
     }
 }

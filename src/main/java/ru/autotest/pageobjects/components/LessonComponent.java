@@ -1,12 +1,14 @@
 package ru.autotest.pageobjects.components;
 
+import com.google.inject.Inject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.autotest.annotations.Component;
 import ru.autotest.data.EnumStartedCourse;
+import ru.autotest.data.MyEnumType;
 import ru.autotest.pageobjects.pages.CoursePage;
+import ru.autotest.support.GuiceScoped;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -34,8 +36,9 @@ public class LessonComponent extends AbsBaseComponent<LessonComponent> {
     @FindBy(css = "[class='lessons'] .lessons__new-item-start, [class='lessons'] .lessons__new-item-bottom > .lessons__new-item-time")
     private List<WebElement> dateLessons;
 
-    public LessonComponent(WebDriver driver) {
-        super(driver);
+    @Inject
+    public LessonComponent(GuiceScoped guiceScoped) {
+        super(guiceScoped);
     }
 
     private WebElement findElementByName(String nameLesson) {
@@ -53,11 +56,87 @@ public class LessonComponent extends AbsBaseComponent<LessonComponent> {
 
     public CoursePage clickLessonByNameFromStream(String nameLesson) {
         findElementByName(nameLesson).click();
-        return new CoursePage(driver);
+        return new CoursePage(guiceScoped);
     }
 
     public CoursePage clickLessonFirstStarted(EnumStartedCourse status) {
+        Map<WebElement, Date> newListLessonsMap = getMapDateLessons();
 
+        WebElement elementByDate;
+
+        if (status.equals(EnumStartedCourse.EARLY)) {
+            elementByDate = getItemEARLY(newListLessonsMap);
+        } else {
+            elementByDate = getItemLATE(newListLessonsMap);
+        }
+
+        elementByDate.click();
+
+        return new CoursePage(guiceScoped);
+    }
+
+
+    public void clickLessonByName(String nameLesson) {
+
+        Map<WebElement, Date> map = getMapDateLessons();
+
+        Map<WebElement, Date> result = new HashMap<>();
+
+        for (Map.Entry<WebElement, Date> entry : map.entrySet()) {
+            if (entry.getKey().getText().contains(nameLesson)) {
+                Date value = entry.getValue();
+                WebElement key = entry.getKey();
+                result.put(key, value);
+            }
+        }
+
+        System.out.println("Название курса: \n" + result.keySet().stream().findFirst().get().getText() + "\nДата курса: \n" + result.values().stream().findFirst().get().toString());
+
+        result.keySet().stream().findFirst().get().click();
+
+    }
+
+    public void clickLesson(MyEnumType flag, Date date) {
+        Map<WebElement, Date> map = getMapDateLessons();
+
+        Map<WebElement, Date> result = new HashMap<>();
+        Date value;
+        WebElement key;
+
+        for (Map.Entry<WebElement, Date> entry : map.entrySet()) {
+
+            switch (flag.getTitle()) {
+                case ("больше"):
+                    if (entry.getValue().compareTo(date) > 0) {
+                        value = entry.getValue();
+                        key = entry.getKey();
+                        result.put(key, value);
+                    }
+                    break;
+                case ("равно"):
+                    if (entry.getValue().compareTo(date) == 0) {
+                        value = entry.getValue();
+                        key = entry.getKey();
+                        result.put(key, value);
+                    }
+                    break;
+                case ("меньше"):
+                    if (entry.getValue().compareTo(date) < 0) {
+                        value = entry.getValue();
+                        key = entry.getKey();
+                        result.put(key, value);
+                    }
+                    break;
+            }
+        }
+
+
+        System.out.println("Название курса: \n" + result.keySet().stream().findFirst().get().getText() + "\nДата курса: \n" + result.values().stream().findFirst().get().toString());
+
+        result.keySet().stream().findFirst().get().click();
+    }
+
+    private Map<WebElement, Date> getMapDateLessons() {
         /*создаем мапу в которой элемент и дата
          * получаем список курсов со страницы
          * проходимся по списку и находим для каждого курса дату
@@ -70,9 +149,9 @@ public class LessonComponent extends AbsBaseComponent<LessonComponent> {
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM", new Locale("ru"));
         Map<WebElement, Date> newListLessonsMap = new HashMap<>();
 
-        for (WebElement el : dateLessons) {
+        for (WebElement el : listLessons) {
 
-            strDate = el.getText();
+            strDate = el.findElement(By.cssSelector("[class='lessons'] .lessons__new-item-start, [class='lessons'] .lessons__new-item-bottom > .lessons__new-item-time")).getText();
 
             byte[] barr = strDate.getBytes(Charset.forName("UTF-8"));
             if (barr[0] == -47 && barr[1] == 32) {
@@ -88,34 +167,14 @@ public class LessonComponent extends AbsBaseComponent<LessonComponent> {
             }
             try {
                 dateEl = formatter.parse(strDate);
+                dateEl.setYear(123);
                 newListLessonsMap.put(el, dateEl);
             } catch (ParseException e) {
                 System.out.println("");
             }
         }
 
-        WebElement elementByDate = null;
-
-        // Для ДЗ нужно использовать reduce
-        //        if (status.equals(EnumStartedCourse.EARLY)) {
-        //            elementDate = newListLessonsMap.entrySet().stream()
-        //                    .min(Comparator.comparing(e -> e.getValue()))
-        //                    .get();
-        //        } else {
-        //            elementDate = newListLessonsMap.entrySet().stream()
-        //                    .max(Comparator.comparing(e -> e.getValue()))
-        //                    .get();
-        //        }
-
-        if (status.equals(EnumStartedCourse.EARLY)) {
-            elementByDate = getItemEARLY(newListLessonsMap);
-        } else {
-            elementByDate = getItemLATE(newListLessonsMap);
-        }
-
-        elementByDate.click();
-
-        return new CoursePage(driver);
+        return newListLessonsMap;
     }
 
 
