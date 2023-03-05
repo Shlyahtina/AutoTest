@@ -1,4 +1,4 @@
-package ru.AutoTest;
+package ru.autotest;
 
 public class Main {
     public static void main(String[] args) {
