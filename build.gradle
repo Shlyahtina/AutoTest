@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'checkstyle'
+    id "com.github.spotbugs" version "5.0.14"
 }
 
 group 'ru.AutoTest'
@@ -10,10 +12,23 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    testImplementation 'org.testng:testng:7.6.1'
+
 }
 
 test {
     useJUnitPlatform()
+    systemProperty "browser", "chrome"
+    System.setProperty("browser", "chrome")
+
+    systemProperty "webdriver.base.url", "https://otus.ru"
+    System.setProperty("webdriver.base.url", "https://otus.ru")
+
+    systemProperty "waiter_timeout_seconds", "30"
+    System.setProperty("waiter_timeout_seconds", "30")
 }
