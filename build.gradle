@@ -25,4 +25,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty "BASE_URL", "https://petstore.swagger.io/v2"
+    System.setProperty("BASE_URL", "https://petstore.swagger.io/v2")
 }
