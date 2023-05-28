@@ -16,4 +16,9 @@ public class CoursePage extends AbstractPage<CoursePage> {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String getBaseUrl() {
+        return super.getBaseUrl();
+    }
 }

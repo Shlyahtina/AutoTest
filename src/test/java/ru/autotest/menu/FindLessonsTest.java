@@ -1,5 +1,6 @@
 package ru.autotest.menu;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +8,7 @@ import ru.autotest.CustomTestInstance;
 import ru.autotest.annotations.Driver;
 import ru.autotest.data.EnumStartedCourse;
 import ru.autotest.pageobjects.components.LessonComponent;
+import ru.autotest.pageobjects.pages.CoursePage;
 import ru.autotest.pageobjects.pages.OtusMainPage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +22,8 @@ public class FindLessonsTest {
     public void selectLessonByNameWithStreamTest() {
         new OtusMainPage(driver).open();
         new LessonComponent(driver).clickLessonByNameFromStream("Apache Kafka");
-        assertEquals("https://otus.ru/lessons/kafka/", driver.getCurrentUrl());
+        String url =   new CoursePage(driver).getBaseUrl();
+        assertEquals(url+"/lessons/kafka/", driver.getCurrentUrl());
     }
 
     @Test

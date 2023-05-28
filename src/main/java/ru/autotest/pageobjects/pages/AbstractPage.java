@@ -22,7 +22,7 @@ public abstract class AbstractPage<T> extends PageObject<T> {
         super(driver);
     }
 
-    private String getBaseUrl() {
+    protected String getBaseUrl() {
         return StringUtils.stripEnd(System.getProperty("webdriver.base.url", "https://otus.ru"), "/");
     }
 
