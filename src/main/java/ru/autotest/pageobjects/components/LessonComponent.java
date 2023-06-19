@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Component(".container-padding-bottom")
@@ -93,26 +94,63 @@ public class LessonComponent extends AbsBaseComponent<LessonComponent> {
             }
         }
 
-        Map.Entry<WebElement, Date> elementDate;
+        WebElement elementByDate = null;
+
+        // Для ДЗ нужно использовать reduce
+        //        if (status.equals(EnumStartedCourse.EARLY)) {
+        //            elementDate = newListLessonsMap.entrySet().stream()
+        //                    .min(Comparator.comparing(e -> e.getValue()))
+        //                    .get();
+        //        } else {
+        //            elementDate = newListLessonsMap.entrySet().stream()
+        //                    .max(Comparator.comparing(e -> e.getValue()))
+        //                    .get();
+        //        }
 
         if (status.equals(EnumStartedCourse.EARLY)) {
-            elementDate = newListLessonsMap.entrySet().stream()
-                    .min(Comparator.comparing(e -> e.getValue()))
-                    .get();
+            elementByDate = getItemEARLY(newListLessonsMap);
         } else {
-            elementDate = newListLessonsMap.entrySet().stream()
-                    .max(Comparator.comparing(e -> e.getValue()))
-                    .get();
+            elementByDate = getItemLATE(newListLessonsMap);
         }
 
-        elementDate.getKey().click();
+        elementByDate.click();
 
         return new CoursePage(driver);
     }
 
 
-    public void moveMouseByNameLessons(String nameLesson) {
-        moveToElement(findElementByName(nameLesson));
+    public LessonComponent moveMouseByNameLessons(String nameLesson) {
+        WebElement el = moveToElement(findElementByName(nameLesson));
+        assertEquals("js-stats lessons__new-item lessons__new-item_hovered", el.getAttribute("class"));
+        return this;
+    }
+
+    private WebElement getItemLATE(Map<WebElement, Date> lessMap) {
+
+        Optional<Date> date = lessMap.values().stream()
+                .reduce(
+                        (f, s) ->
+                                s.compareTo(f) < 0
+                                        ? (Date) f
+                                        : s);
+
+        WebElement element = lessMap.entrySet().stream().filter(e -> e.getValue().equals(date.get())).findFirst().get().getKey();
+
+        return element;
+    }
+
+    private WebElement getItemEARLY(Map<WebElement, Date> lessMap) {
+
+        Optional<Date> date = lessMap.values().stream()
+                .reduce(
+                        (f, s) ->
+                                s.compareTo(f) >= 0
+                                        ? (Date) f
+                                        : s);
+
+        WebElement element = lessMap.entrySet().stream().filter(e -> e.getValue().equals(date.get())).findFirst().get().getKey();
+
+        return element;
     }
 
 
