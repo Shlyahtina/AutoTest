@@ -20,12 +20,18 @@ public class AndyTest {
                 .startPageTextSameAs(StartPageHeaderData.SECOND_PAGE_HEADER)
                 .clickNextButton()
                 .skipButtonShouldBeVisible();
-            new AlertComponent()
+        new AlertComponent()
                     .popupShouldNOTVisible();
         startPage
                 .clickSkipButton()
                 .popupShouldVisible();
+    }
 
-
+    @Test
+    public void test1(){
+        new StartPage()
+                .open()
+                .clickNextButton()
+                .clickNextButton();
     }
 }

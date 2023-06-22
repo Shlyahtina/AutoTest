@@ -1,4 +1,6 @@
 package ru.autotest.component.popups;
 
-public abstract class AbsPopupBase<T> implements IPopup<AbsPopupBase>{
+import ru.autotest.component.AbsBaseComponent;
+
+public abstract class AbsPopupBase<T> extends AbsBaseComponent implements IPopup<T> {
 }

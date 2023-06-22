@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class AlertComponent extends AbsPopupBase<AlertComponent> {
 
-    private SelenideElement alertElement = $(By.id(""));
+    private SelenideElement alertElement = $(By.id("android:id/parentPanel"));
 
     @Override
     public AlertComponent popupShouldVisible(){

@@ -1,4 +1,5 @@
 package ru.autotest.component;
 
-public class AbsBaseComponent {
+
+public class AbsBaseComponent  {
 }
