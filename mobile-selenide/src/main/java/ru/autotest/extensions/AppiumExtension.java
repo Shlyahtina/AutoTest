@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.autotest.drivers.AppiumSelenideDriver;
 
-public class AppiumExtension implements BeforeAllCallback {
 
+public class AppiumExtension implements BeforeAllCallback {
 
     @Override
     public void beforeAll(ExtensionContext context) {

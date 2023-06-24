@@ -6,13 +6,13 @@ import ru.autotest.component.HeaderComponent;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class StatsPage extends AbsBasePage<StatsPage>{
+public class StatsPage extends AbsBasePage<StatsPage> {
 
     @FindBy(css = ".android.widget.HorizontalScrollView")
     HeaderComponent headerComponent;
 
-    public StatsPage exercisePageTextSameAs(String exText){
-        $(String.format("[text='%s']",exText)).shouldBe(Condition.visible);
+    public StatsPage exercisePageTextSameAs(String exText) {
+        $(String.format("[text='%s']", exText)).shouldBe(Condition.visible);
         return this;
     }
 

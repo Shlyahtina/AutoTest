@@ -10,30 +10,34 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class StartPage extends AbsBasePage<StartPage> {
 
-    private SelenideElement skipButton =  $("[text='Skip >']");
+    private SelenideElement skipButton = $("[text='Skip >']");
 
     public StartPage clickNextButton() {
         $("[text='Next']").click();
         return this;
     }
 
-    public StartPage startPageShouldOpened(){
+    public StartPage startPageShouldOpened() {
         $(By.id("android:id/content")).shouldBe(Condition.visible);
-
         return this;
     }
 
-    public StartPage startPageTextSameAs(StartPageHeaderData exText){
-        $(String.format("[text='%s']",exText.getHeader())).shouldBe(Condition.visible);
+    public boolean isOpenStartPage(StartPageHeaderData exText) {
+        return $(String.format("[text='%s']", exText.getHeader())).isDisplayed();
+    }
+
+
+    public StartPage startPageTextSameAs(StartPageHeaderData exText) {
+        $(String.format("[text='%s']", exText.getHeader())).shouldBe(Condition.visible);
         return this;
     }
 
-    public StartPage skipButtonShouldBeVisible(){
+    public StartPage skipButtonShouldBeVisible() {
         skipButton.shouldBe(Condition.visible);
         return this;
     }
 
-    public AlertComponent clickSkipButton(){
+    public AlertComponent clickSkipButton() {
         skipButton.click();
         return new AlertComponent();
     }

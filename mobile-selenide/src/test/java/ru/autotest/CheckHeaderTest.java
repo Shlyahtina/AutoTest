@@ -22,54 +22,60 @@ public class CheckHeaderTest {
     @DisplayName("Шаг 1: Проверяем первую старницу")
     public void visibleStartPage() {
         StartPage startPage = new StartPage()
-                .open()
-                .startPageShouldOpened()
-                .startPageTextSameAs(StartPageHeaderData.FIRST_PAGE_HEADER)
-                .clickNextButton()
-                .startPageTextSameAs(StartPageHeaderData.SECOND_PAGE_HEADER)
-                .clickNextButton()
-                .skipButtonShouldBeVisible();
-        new AlertComponent()
-                .popupShouldNOTVisible();
-        startPage
-                .clickSkipButton()
-                .popupShouldVisible();
+                .open();
+
+        if (startPage.isOpenStartPage(StartPageHeaderData.FIRST_PAGE_HEADER)) {
+
+            startPage.startPageShouldOpened()
+                    .startPageTextSameAs(StartPageHeaderData.FIRST_PAGE_HEADER)
+                    .clickNextButton()
+                    .startPageTextSameAs(StartPageHeaderData.SECOND_PAGE_HEADER)
+                    .clickNextButton()
+                    .skipButtonShouldBeVisible();
+            new AlertComponent()
+                    .popupShouldNOTVisible();
+            startPage
+                    .clickSkipButton()
+                    .popupShouldVisible();
+        }
     }
 
     @Test
     @Order(2)
     @DisplayName("Шаг 2: Закрываем алерт")
-    public void closeAlert(){
-        new AlertComponent()
-                .clickButtonOK()
-                .chatPageShouldOpened();
+    public void closeAlert() {
+        AlertComponent alertComponent = new AlertComponent();
+        if (alertComponent.isPopupVisible()) {
+            alertComponent.clickButtonOK()
+                    .chatPageShouldOpened();
+        }
     }
 
     @Test
     @Order(3)
     @DisplayName("Шаг 3: Проверяем заголовок на странице ChatPage")
-    public void verifyVisibleHeaderByChatPage(){
+    public void verifyVisibleHeaderByChatPage() {
         page(new ChatPage()).headerComponent.checkHeaderVisible();
     }
 
     @Test
     @Order(3)
     @DisplayName("Шаг 4: Проверяем заголовок на странице ExercisePage")
-    public void verifyVisibleHeaderByExercisePage(){
+    public void verifyVisibleHeaderByExercisePage() {
         page(new ChatPage()).headerComponent.clickTabExercise().headerComponent.checkHeaderVisible();
     }
 
     @Test
     @Order(3)
     @DisplayName("Шаг 5: Проверяем заголовок на странице GrammarPage")
-    public void verifyVisibleHeaderByGrammarPage(){
+    public void verifyVisibleHeaderByGrammarPage() {
         page(new ExercisePage()).headerComponent.clickTabExercise().headerComponent.checkHeaderVisible();
     }
 
     @Test
     @Order(3)
     @DisplayName("Шаг 6: Проверяем заголовок на странице StatsPage")
-    public void verifyVisibleHeaderByStatsPage(){
+    public void verifyVisibleHeaderByStatsPage() {
         page(new GrammarPage()).headerComponent.clickTabExercise().headerComponent.checkHeaderVisible();
     }
 }

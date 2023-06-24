@@ -6,13 +6,13 @@ import ru.autotest.component.HeaderComponent;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class GrammarPage extends AbsBasePage<GrammarPage>{
+public class GrammarPage extends AbsBasePage<GrammarPage> {
 
     @FindBy(css = ".android.widget.HorizontalScrollView")
     public HeaderComponent headerComponent;
 
-    public GrammarPage exercisePageTextSameAs(String exText){
-        $(String.format("[text='%s']",exText)).shouldBe(Condition.visible);
+    public GrammarPage exercisePageTextSameAs(String exText) {
+        $(String.format("[text='%s']", exText)).shouldBe(Condition.visible);
         return this;
     }
 

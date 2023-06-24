@@ -29,4 +29,9 @@ public class AlertComponent extends AbsPopupBase<AlertComponent> {
         return new ChatPage();
     }
 
+
+    public boolean isPopupVisible() {
+        return alertElement.isDisplayed();
+    }
+
 }
